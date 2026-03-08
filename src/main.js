@@ -1723,7 +1723,7 @@ function createMap() {
   n3.turnover = Math.max(5, Math.round(n3.runtime * 0.3));
 
   n16.zone = 4; n16.rideCategory = "umum"; n16.isContinuous = false; n16.hasFastTrack = false; n16.minHeight = 100;
-  n16.openHour = 12; n16.openMinute = 0; n16.closeHour = 20; n16.closeMinute = 0;
+  n16.openHour = 12; n16.openMinute = 0; n16.closeHour = 19; n16.closeMinute = 0;
   n16.capacity = 40; n16.minCapacity = 10; n16.runtime = 3.0; n16.isPopular = false;
   n16.turnover = Math.max(5, Math.round(n16.runtime * 0.3));
 

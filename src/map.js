@@ -504,13 +504,31 @@ class MapNode {
 
   getQueueTime() {
     if (this.type == "ride") {
+      
+      // 1. PENANGANAN WAHANA KONTINYU (Misal: Istana Boneka / Rumah Kaca)
       if (this.isContinuous) {
-        return this.getCurrentOccupancy() >= this.capacity ? 999 : 0;
+        // Alih-alih mengembalikan 999 (yang bisa merusak rata-rata matematis),
+        // kita gunakan interval jeda antrean rasional jika wahana sedang penuh.
+        if (this.getCurrentOccupancy() >= this.capacity) {
+            let dispatchInterval = this.interval || 1; // Jeda antar perahu/orang masuk
+            return Math.ceil(this.queuePeopleCount / this.capacity) * dispatchInterval;
+        } else {
+            return 0; // Langsung masuk jika belum penuh
+        }
       }
-      // PERBAIKAN: Hitung estimasi waktu berdasarkan JUMLAH ORANG (queuePeopleCount)
-      // Misal antrean 10 orang, kapasitas 4 -> ceil(10/4) = 3 ronde putaran
-      return int(ceil(this.queuePeopleCount / this.capacity)) * this.turnover;
-    } else return 0;
+
+      // 2. PENANGANAN WAHANA BATCH (Misal: Halilintar / Tornado)
+      // Waktu 1 Siklus Penuh = Durasi Main + Waktu Bongkar Muat
+      let fullCycleTime = (this.runtime || 5) + (this.turnover || 2);
+      
+      // Jumlah putaran yang harus ditunggu
+      let numberOfCycles = Math.ceil(this.queuePeopleCount / this.capacity);
+      
+      return numberOfCycles * fullCycleTime;
+      
+    } else {
+      return 0; // Untuk node tipe 'junc' (persimpangan) atau 'entrance'
+    }
   }
 
   reset() {

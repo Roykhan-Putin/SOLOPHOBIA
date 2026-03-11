@@ -738,7 +738,7 @@ class MapNode {
                this.startRideAction(peopleInside); // Oper pass parameter
             }
           } else {
-            let currentCap = isPulseRide ? this.capacity : this.capacity; 
+            let currentCap = isPulseRide ? this.minCapacity : this.capacity;
             if (this.queue.size() >= currentCap || this.waitTimer >= (this.waitLimit * 60)) {
               this.startRideAction(0);
             }

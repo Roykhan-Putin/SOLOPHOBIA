@@ -1715,8 +1715,8 @@ function createMap() {
 
   n26.zone = 3; n26.rideCategory = "dewasa"; n26.isContinuous = false; n26.hasFastTrack = true; n26.minHeight = 0;
   n26.openHour = 10; n26.openMinute = 0; n26.closeHour = 18; n26.closeMinute = 45;
-  n26.capacity = 4; n26.minCapacity = 2; n26.runtime = 7.0; n26.isPopular = true;
-  n26.turnover = 0.5;
+  n26.capacity = 4; n26.minCapacity = 4; n26.runtime = 20.0; n26.isPopular = true;
+  n26.turnover = Math.max(5, Math.round(n26.runtime * 0.3));
 
   n27.zone = 3; n27.rideCategory = "dewasa"; n27.isContinuous = false; n27.hasFastTrack = true; n27.minHeight = 100;
   n27.openHour = 10; n27.openMinute = 0; n27.closeHour = 18; n27.closeMinute = 45;
@@ -1888,6 +1888,21 @@ function addAgents() {
       } else {
         numAdults = Math.random() < 0.5 ? 1 : 2;
         numChildren = 4 - numAdults;
+      }
+    }
+
+    // ✅ FIX: Clamp size agar tidak melebihi sisa slot arrivalSchedule
+    // Ini memastikan totalVisitors tepat = N tanpa kelebihan
+    const remainingSlots = arrivalSchedule.length;
+    if (remainingSlots <= 0) break;
+    if (size > remainingSlots) {
+      size = remainingSlots;
+      if (type === "GROUP_FAMILY") {
+        numAdults = Math.max(1, Math.min(numAdults, size - 1));
+        numChildren = size - numAdults;
+      } else {
+        numAdults = size;
+        numChildren = 0;
       }
     }
 

@@ -172,10 +172,10 @@ class Agent {
         } else if (this.agentState != AgentStates.ENTERED && Math.random() < DEPARTURE_PROB) {
             wantsToLeave = true;
         }
-        
-        // Aturan darurat jam tutup
-        if (hoursLeft <= 0.5) wantsToLeave = true;
     }
+
+    // Aturan darurat jam tutup berlaku untuk semua agen termasuk yang belum naik wahana
+    if (hoursLeft <= 0.5) wantsToLeave = true;
 
     if (wantsToLeave) {
         this.targetNode = this.map.entrance;
@@ -214,12 +214,12 @@ class Agent {
             this.targetNode = this.map.entrance;
             this.agentState = AgentStates.EXITING;
         } else {
-            // ✅ MODE PANIK: Jika sisa waktu ≤ 120 menit dan wahana < 2,
+            // ✅ MODE PANIK: Jika sisa waktu ≤ 120 menit,
             // filter hanya wahana yang masih bisa diselesaikan sebelum tutup,
             // kemudian tetap gunakan weighted random seperti biasa
             let currentTimeMins2 = (currentHour * 60) + currentMinute;
             let closingTimeMins2 = (parkCloseHour * 60);
-            let isPanic = ((closingTimeMins2 - currentTimeMins2) <= 120 && this.numRidesTaken < 2);
+            let isPanic = ((closingTimeMins2 - currentTimeMins2) <= 120);
 
             if (isPanic) {
                 let feasible = validRides.filter(info => {
@@ -366,9 +366,17 @@ class Agent {
         let isDesperate = (((parkCloseHour * 60) - currentTimeMins) <= 120 && this.numRidesTaken < 2);
 
         if ((!isDesperate && realWaitTime > absoluteMaxWait * 2) || (expectedFinish > rideClosingMins - 5)) {
-            this.visitedRides.push(this.targetNode);
-            this.agentState = AgentStates.FINISHED;
-            break;
+            // ✅ FIX: Jangan masukkan ke visitedRides agar wahana bisa dicoba lagi
+            // saat antrean sudah mereda. Cukup cari tujuan lain.
+            // Namun jika sudah terlalu sering balk (> 10x), tandai agar tidak loop selamanya.
+            this.balkCount = (this.balkCount || 0) + 1;
+            if (this.balkCount > 10) {
+                // Paksa masuk antrean meski panjang agar tidak sia-sia seharian
+                this.balkCount = 0;
+            } else {
+                this.agentState = AgentStates.FINISHED;
+                break;
+            }
         }
 
         let occ = this.targetNode.getCurrentOccupancy();

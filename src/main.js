@@ -482,7 +482,7 @@ function draw() {
     // Rekam Global Rho untuk rata-rata harian (ambil tiap frame kelipatan 60 agar tidak terlalu berat)
     if (frameCount % 60 === 0 && currentHour < parkCloseHour) {
         
-        // 🔥 PERBAIKAN: Cegah Dilusi Data! 
+        // Cegah Dilusi Data! 
         // Hanya rekam nilai Rho jika ada orang di taman, ATAU masih ada jadwal kedatangan pengunjung.
         if (agents.length > 0 || arrivalSchedule.length > 0) {
             let macroMetrics = getGlobalQueueMetrics(simMap);
@@ -968,9 +968,9 @@ function toggleStats() {
   showStats = !showStats;
 }
 
-// ========================================================
-// 🔥 EXPORT CSV (MENGUNDUH 3 FILE DENGAN REKAP HISTORIS) 🔥
-// ========================================================
+// ===================================================
+// EXPORT CSV (MENGUNDUH 3 FILE DENGAN REKAP HISTORIS)
+// ===================================================
 function exportCSV() {
   isRunning = false;
 
@@ -1208,7 +1208,7 @@ function drawDisplay() {
       const w = 270;
       const h = headerHeight + textHeight + graphH + padding * 2 + 10;
 
-      // 🔥 KUNCI POSISI DI POJOK KIRI ATAS (Di bawah tombol Toggle Panel)
+      // KUNCI POSISI DI POJOK KIRI ATAS
       const x = 20;
       const y = 70;
 
@@ -1310,9 +1310,9 @@ function drawStats() {
   const satisfactionScore = calculateSatisfaction(rawAvgRides, rawAvgQueue);
   const displayMinRides = minRidesRecord === Infinity ? 0 : minRidesRecord;
 
-  // ==========================================================
-  // 🔥 PERHITUNGAN RHO GLOBAL UNTUK DITAMPILKAN DI KARTU 🔥
-  // ==========================================================
+  // =====================================================
+  // PERHITUNGAN RHO GLOBAL UNTUK DITAMPILKAN DI KARTU
+  // =====================================================
   let currentGlobalRho = 0;
   let avgDailyRho = 0;
   

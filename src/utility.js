@@ -173,7 +173,7 @@ const GAMMA_WAIT = 0.011; // Konstanta penalti waktu tunggu (dalam menit)
 const LAMBDA = 0.6;       // Bobot prioritas (60% jumlah wahana, 40% waktu antre)
 
 function calculateSatisfaction(avgRides, avgWaitTime) {
-    // 🔥 SYARAT BATAS: Jika belum ada wahana yang berhasil dinaiki, kepuasan mutlak 0%
+    // SYARAT BATAS: Jika belum ada wahana yang berhasil dinaiki, kepuasan mutlak 0%
     if (avgRides === 0) return "0.00";
 
     // 1. Hitung utilitas jumlah wahana (0 to 1)
@@ -253,7 +253,7 @@ function getRhoStatus(rho) {
 }
 
 // =====================================================================
-// 🔥 METRIK JARINGAN ANTREAN GLOBAL (MACRO QUEUEING NETWORK) 🔥
+// METRIK JARINGAN ANTREAN GLOBAL (MACRO QUEUEING NETWORK)
 // Menghitung performa seluruh taman hiburan sebagai satu sistem besar
 // =====================================================================
 function getGlobalQueueMetrics(mapData) {

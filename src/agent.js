@@ -96,7 +96,7 @@ class Agent {
       this.style = AgentTheme.family;
       // Keluarga lumayan malas jalan jauh, tapi tetap menghindari antrean gila
       this.m1 = 0.5; this.m2 = 0.5;
-      this.limit = 30; 
+      this.limit = 30;
     } else if (this.size > 1) {
       this.style = AgentTheme.group;
       // Grup teman FOKUS mencari antrean sepi untuk memaksimalkan wahana!

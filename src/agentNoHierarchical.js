@@ -214,6 +214,34 @@ class Agent {
             this.targetNode = this.map.entrance;
             this.agentState = AgentStates.EXITING;
         } else {
+            // ✅ MODE PANIK: Jika sisa waktu ≤ 120 menit dan wahana < 2,
+            // filter hanya wahana yang masih bisa diselesaikan sebelum tutup,
+            // kemudian tetap gunakan weighted random seperti biasa
+            let currentTimeMins2 = (currentHour * 60) + currentMinute;
+            let closingTimeMins2 = (parkCloseHour * 60);
+            let isPanic = ((closingTimeMins2 - currentTimeMins2) <= 120 && this.numRidesTaken < 2);
+
+            if (isPanic) {
+                let feasible = validRides.filter(info => {
+                    let waitT = this.getTrueWaitTime(info.ride);
+                    let rideClosing = (info.ride.closeHour * 60) + info.ride.closeMinute;
+                    let finishTime = currentTimeMins2 + waitT + (info.ride.runtime || 5) + (info.ride.turnover || 2);
+                    return finishTime < rideClosing + 5;
+                });
+                // Jika ada wahana yang layak, ganti validRides; jika tidak, tetap pakai semua
+                if (feasible.length > 0) {
+                    validRides = feasible;
+                    // Recalculate min-max untuk normalisasi ulang
+                    minQ = Infinity; maxQ = 0; minD = Infinity; maxD = 0;
+                    for (let info of validRides) {
+                        minQ = Math.min(info.queue, minQ);
+                        maxQ = Math.max(info.queue, maxQ);
+                        minD = Math.min(info.distance, minD);
+                        maxD = Math.max(info.distance, maxD);
+                    }
+                }
+            }
+
             // Normalisasi data untuk mendapatkan skor (Range 0 - 1)
             let rangeQ = Math.max(maxQ - minQ, 0.1);
             let rangeD = Math.max(maxD - minD, 1);
@@ -329,7 +357,20 @@ class Agent {
           break;
         }
 
-        // 🛑 TANPA STRATEGI: TIDAK ADA BALKING (PENGUNJUNG PASRAH ANTRE)
+        // ✅ BALKING: Batalkan antrean jika tidak rasional atau tidak keburu
+        let realWaitTime = this.getTrueWaitTime(this.targetNode);
+        let currentTimeMins = (currentHour * 60) + currentMinute;
+        let rideClosingMins = (this.targetNode.closeHour * 60) + this.targetNode.closeMinute;
+        let expectedFinish = currentTimeMins + realWaitTime + (this.targetNode.runtime || 5);
+        let absoluteMaxWait = this.limit + 15;
+        let isDesperate = (((parkCloseHour * 60) - currentTimeMins) <= 120 && this.numRidesTaken < 2);
+
+        if ((!isDesperate && realWaitTime > absoluteMaxWait * 2) || (expectedFinish > rideClosingMins - 5)) {
+            this.visitedRides.push(this.targetNode);
+            this.agentState = AgentStates.FINISHED;
+            break;
+        }
+
         let occ = this.targetNode.getCurrentOccupancy();
         let isWalkThroughClear = this.targetNode.isContinuous && (occ + this.size <= this.targetNode.capacity) && this.targetNode.queue.isEmpty();
 

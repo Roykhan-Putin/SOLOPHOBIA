@@ -259,7 +259,7 @@ function setup() {
     <a href="index.html" class="sim-back-btn">← HOME</a>
     <div class="sim-topbar-center">
       <div class="sim-topbar-dot"></div>
-      <div class="sim-topbar-title">🎢 DUFAN &nbsp;<span>HIERARCHICAL</span></div>
+      <div class="sim-topbar-title">🎢 DUFAN &nbsp;<span>WITHOUT HIERARCHICAL</span></div>
     </div>
     <div class="sim-topbar-right" id="topbar-right-slot"></div>
   `;
@@ -2201,9 +2201,9 @@ function buildFooter(parentEl) {
       <div class="pf-credits">
         <div class="pf-team">
           <span class="pf-credit-label">Tim Pengembang</span>
-          <span class="pf-credit-names">Teknik Industri — Simulasi Sistem 2025</span>
+          <span class="pf-credit-names">Tim Sayang Lomba Sayangg - UNAIR</span>
         </div>
-        <div class="pf-copy">© 2025 Theme Park Sim. All rights reserved.</div>
+        <div class="pf-copy">© 2026 Theme Park Sim. All rights reserved.</div>
       </div>
     </div>
   `);

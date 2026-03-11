@@ -2201,9 +2201,9 @@ function buildFooter(parentEl) {
       <div class="pf-credits">
         <div class="pf-team">
           <span class="pf-credit-label">Tim Pengembang</span>
-          <span class="pf-credit-names">Teknik Industri — Simulasi Sistem 2025</span>
+          <span class="pf-credit-names">Tim Sayang Lomba Sayangg - UNAIR</span>
         </div>
-        <div class="pf-copy">© 2025 Theme Park Sim. All rights reserved.</div>
+        <div class="pf-copy">© 2026 Theme Park Sim. All rights reserved.</div>
       </div>
     </div>
   `);

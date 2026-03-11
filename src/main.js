@@ -1864,6 +1864,22 @@ function addAgents() {
       }
     }
 
+    // ✅ FIX: Clamp size agar tidak melebihi sisa slot arrivalSchedule
+    // Ini memastikan totalVisitors tepat = N tanpa kelebihan
+    const remainingSlots = arrivalSchedule.length;
+    if (remainingSlots <= 0) break;
+    if (size > remainingSlots) {
+      size = remainingSlots;
+      // Sesuaikan numAdults/numChildren jika grup diperkecil
+      if (type === "GROUP_FAMILY") {
+        numAdults = Math.max(1, Math.min(numAdults, size - 1));
+        numChildren = size - numAdults;
+      } else {
+        numAdults = size;
+        numChildren = 0;
+      }
+    }
+
     // Hapus slot jadwal sesuai total size
     for (let i = 0; i < size; i++) {
       if (arrivalSchedule.length > 0) arrivalSchedule.shift();

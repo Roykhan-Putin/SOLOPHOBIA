@@ -607,7 +607,7 @@ class MapNode {
   }
 
   enqueue(agent, priority) {
-    // 🔥 PERBAIKAN FATAL: Memastikan Antrean Murni FIFO (First-In First-Out)
+    // Memastikan Antrean Murni FIFO (First-In First-Out)
     // Priority = 1 (FastTrack) bernilai 1.000.000. 
     // Kita kurangi dengan waktu kedatangan (secondsInSim) agar yang antre 
     // lebih dulu (waktu lebih kecil) memiliki nilai prioritas absolut yang lebih tinggi!
@@ -672,7 +672,7 @@ class MapNode {
         this.turnoverCooldown = max(0, this.turnoverCooldown - deltaTime / 1000 * TIME_ACCELERATION);
       }
 
-      // 🔥 PENGUSIRAN PAKSA SAAT JAM MALAM (Mencegah Simulasi Stuck)
+      // PENGUSIRAN PAKSA SAAT JAM MALAM (Mencegah Simulasi Stuck)
       if (!this.isOpen()) { 
         // 1. Usir Antrean
         let size = this.queue.size();
@@ -690,11 +690,11 @@ class MapNode {
         this.runCooldowns = [];
         this.isWaiting = false;
         this.waitTimer = 0;
-        this.queuePeopleCount = 0; // 🔥 TAMBAHKAN INI AGAR RESET KE NOL!
-        return; // Hentikan proses lebih lanjut
+        this.queuePeopleCount = 0; 
+        return;
       }
 
-      // 🔥 UPDATE WAKTU MAIN (Berjalan Normal)
+      // UPDATE WAKTU MAIN (Berjalan Normal)
       if (this.runCooldowns.length > 0) {
         let i = 0;
         while (i < this.runCooldowns.length) {
@@ -713,7 +713,7 @@ class MapNode {
         }
       }
 
-      // 🔥 PROSES MASUK ANTREAN
+      // PROSES MASUK ANTREAN
       if (!this.queue.isEmpty()) {
         if (!this.isWaiting) {
           this.isWaiting = true;
@@ -752,7 +752,6 @@ class MapNode {
     this.updateArrivalRate();
   }
 
-  // 🔥 VERSI 100% ANTI-FREEZE & CRASH-PROOF
   startRideAction(peopleInside = 0) {
     this.isWaiting = false;
     this.waitTimer = 0;

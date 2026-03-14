@@ -191,7 +191,6 @@ class Agent {
         let zonesChecked = 0;
         let fallbackRides = []; 
 
-        // 🔥 STRATEGI CASE 2 LOMBA: PEMBAGIAN TIPE ALGORITMA 🔥
         // Jika pengunjung tipe SOLO atau FastTrack, mereka jadi "SPEEDRUNNER"
         // Mereka menggunakan Global Greedy Search (Melihat seluruh map sekaligus)
         let isGlobalSearch = (this.type === "SOLO" || this.priority); 
@@ -235,9 +234,9 @@ class Agent {
                 
                 if (expectedFinishTime > (rideClosingMins - 5)) continue; 
 
-                // =============================================================
-                // 🔥 2. STRATEGI GEDUNG INDOOR (ICE AGE, KONTIKI, PLAYGROUND) 🔥
-                // =============================================================
+                // ============================================================
+                // 2. STRATEGI GEDUNG INDOOR (ICE AGE, KONTIKI, PLAYGROUND)
+                // ============================================================
                 let indoorRides = ["Ride 7", "Ride 10", "Ride 12"];
                 let indoorBonus = 0;
                 
@@ -316,7 +315,7 @@ class Agent {
   }
 
   startMoving() {
-    // 🔥 KEAMANAN JALUR: Mencegah error jika agen sudah berada di titik tujuan
+    // Cegah error jika agen sudah berada di titik tujuan
     if (!this.path || this.path.length === 0) {
       this.targetX = this.x;
       this.targetY = this.y;
@@ -332,7 +331,7 @@ class Agent {
     this.initialY = this.y;
     this.lerpT = 0; 
     
-    // 🔥 PERBAIKAN ANTI-CRASH: Mencegah timeRequired menjadi 0 yang menghasilkan angka Infinity
+    // Cegah timeRequired menjadi 0 yang menghasilkan angka Infinity
     let d = dist(this.x, this.y, this.targetX, this.targetY);
     this.timeRequired = d / this.moveSpeed;
     
@@ -371,7 +370,6 @@ class Agent {
         
       case AgentStates.EXITED:
       case AgentStates.LEFT:
-        // LAKUKAN NOTHING! 
         // Biarkan main.js yang menghapus agen ini di fungsi removeAgents().
         // Ini mencegah infinite loop jika update() terpanggil pada agen yang sudah mati.
         break;
@@ -383,9 +381,9 @@ class Agent {
           break;
         }
 
-        // =============================================================
-        // 🔥 STRATEGI BARU: BALKING (Membatalkan Niat Saat Tiba)
-        // =============================================================
+        // ====================================
+        // BALKING (Membatalkan Niat Saat Tiba)
+        // ====================================
         let realWaitTime = this.getTrueWaitTime(this.targetNode);
         let currentTimeMins = (currentHour * 60) + currentMinute;
         
@@ -408,7 +406,7 @@ class Agent {
         }
 
         // =============================================================
-        // Jika lolos Balking, baru diizinkan masuk ke wahana...
+        // Jika lolos Balking, baru diizinkan masuk ke wahana
         if (this.targetNode.isContinuous) {
             let occ = this.targetNode.getCurrentOccupancy();
             if (occ + this.size <= this.targetNode.capacity) {
@@ -458,7 +456,7 @@ class Agent {
           this.parentAgent.numRidesTaken = Math.max(this.parentAgent.numRidesTaken, this.numRidesTaken);
           if (this.targetNode) this.parentAgent.visitedRides.push(this.targetNode);
 
-          // 🔥 PERBAIKAN: Selalu bangunkan induk jika dia sedang berstatus WAITING_REUNION
+          // Selalu bangunkan induk jika dia sedang berstatus WAITING_REUNION
           if (this.parentAgent.waitingForParts <= 0 && this.parentAgent.agentState === AgentStates.WAITING_REUNION) {
             this.parentAgent.agentState = AgentStates.FINISHED; 
           }
@@ -477,7 +475,7 @@ class Agent {
     this.startQueueTime = secondsInSim;
   }
 
-  // 🔥 VERSI AMAN: Sinkronisasi Mutlak Buku Harian & Variabel Angka
+  // Sinkronisasi Mutlak Buku Harian & Variabel Angka
   startRiding() {
     this.agentState = AgentStates.RIDING; 
     
@@ -511,7 +509,7 @@ class Agent {
             }
             if (!exists) {
                 this.parentAgent.rideHistoryLog.push(logEntry);
-                // 🔥 SINKRONISASI: Paksa angka mengikuti panjang buku harian!
+                // Paksa angka mengikuti panjang buku harian!
                 this.parentAgent.numRidesTaken = this.parentAgent.rideHistoryLog.length;
             }
             
@@ -522,7 +520,7 @@ class Agent {
             }
             if (!exists) {
                 this.rideHistoryLog.push(logEntry);
-                // 🔥 SINKRONISASI: Paksa angka mengikuti panjang buku harian!
+                // Paksa angka mengikuti panjang buku harian!
                 this.numRidesTaken = this.rideHistoryLog.length;
             }
         }
@@ -557,9 +555,9 @@ class Agent {
     this.agentState = AgentStates.FINISHED;
   }
 
-  // =============================================================
-  // 🔥 FUNGSI BARU: X-RAY VISION UNTUK MEMBONGKAR ANTREAN ASLI
-  // =============================================================
+  // ===========================================
+  // X-RAY VISION UNTUK MEMBONGKAR ANTREAN ASLI
+  // ===========================================
   getTrueWaitTime(rideNode) {
       let baseTime = rideNode.getQueueTime();
 

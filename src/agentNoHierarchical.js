@@ -138,7 +138,6 @@ class Agent {
   }
 
   // =============================================================
-  // 🛑 VERSI TANPA STRATEGI (REFERENSI GITHUB ASLI)
   // Pengunjung menggunakan probabilitas skor acak 
   // (Jarak & Antrean Dinormalisasi, lalu dipilih secara rolet)
   // =============================================================
@@ -214,7 +213,7 @@ class Agent {
             this.targetNode = this.map.entrance;
             this.agentState = AgentStates.EXITING;
         } else {
-            // ✅ MODE PANIK: Jika sisa waktu ≤ 120 menit,
+            // MODE PANIK: Jika sisa waktu ≤ 120 menit,
             // filter hanya wahana yang masih bisa diselesaikan sebelum tutup,
             // kemudian tetap gunakan weighted random seperti biasa
             let currentTimeMins2 = (currentHour * 60) + currentMinute;
@@ -290,7 +289,7 @@ class Agent {
   }
 
   startMoving() {
-    // 🔥 KEAMANAN JALUR: Mencegah error jika agen sudah berada di titik tujuan
+    // KEAMANAN JALUR: Mencegah error jika agen sudah berada di titik tujuan
     if (!this.path || this.path.length === 0) {
       this.targetX = this.x;
       this.targetY = this.y;
@@ -306,7 +305,7 @@ class Agent {
     this.initialY = this.y;
     this.lerpT = 0; 
     
-    // 🔥 PERBAIKAN ANTI-CRASH: Mencegah timeRequired menjadi 0 yang menghasilkan angka Infinity
+    // Mencegah timeRequired menjadi 0 yang menghasilkan angka Infinity
     let d = dist(this.x, this.y, this.targetX, this.targetY);
     this.timeRequired = d / this.moveSpeed;
     
@@ -345,9 +344,6 @@ class Agent {
         
       case AgentStates.EXITED:
       case AgentStates.LEFT:
-        // LAKUKAN NOTHING! 
-        // Biarkan main.js yang menghapus agen ini di fungsi removeAgents().
-        // Ini mencegah infinite loop jika update() terpanggil pada agen yang sudah mati.
         break;
       
       case AgentStates.REACHED:
@@ -357,7 +353,7 @@ class Agent {
           break;
         }
 
-        // ✅ BALKING: Batalkan antrean jika tidak rasional atau tidak keburu
+        // BALKING: Batalkan antrean jika tidak rasional atau tidak keburu
         let realWaitTime = this.getTrueWaitTime(this.targetNode);
         let currentTimeMins = (currentHour * 60) + currentMinute;
         let rideClosingMins = (this.targetNode.closeHour * 60) + this.targetNode.closeMinute;
@@ -366,7 +362,7 @@ class Agent {
         let isDesperate = (((parkCloseHour * 60) - currentTimeMins) <= 120 && this.numRidesTaken < 2);
 
         if ((!isDesperate && realWaitTime > absoluteMaxWait * 2) || (expectedFinish > rideClosingMins - 5)) {
-            // ✅ FIX: Jangan masukkan ke visitedRides agar wahana bisa dicoba lagi
+            // Jangan masukkan ke visitedRides agar wahana bisa dicoba lagi
             // saat antrean sudah mereda. Cukup cari tujuan lain.
             // Namun jika sudah terlalu sering balk (> 10x), tandai agar tidak loop selamanya.
             this.balkCount = (this.balkCount || 0) + 1;
@@ -404,14 +400,12 @@ class Agent {
                let priorityVal = (this.priority && this.targetNode.hasFastTrack) ? 1 : 0;
                this.targetNode.enqueue(childrenAgent, priorityVal);
                
-               // 🔥 FIX FREEZE 2: Kunci anak di antrean agar tidak kabur!
                childrenAgent.agentState = AgentStates.QUEUING; 
                this.agentState = AgentStates.WAITING_REUNION; 
             } else {
                let priorityVal = (this.priority && this.targetNode.hasFastTrack) ? 1 : 0;
                this.targetNode.enqueue(this, priorityVal);
-               
-               // 🔥 FIX FREEZE 3: Pastikan ganti ke QUEUING agar loop selesai!
+              
                this.agentState = AgentStates.QUEUING; 
             }
         }
@@ -431,7 +425,7 @@ class Agent {
           this.parentAgent.numRidesTaken = Math.max(this.parentAgent.numRidesTaken, this.numRidesTaken);
           if (this.targetNode) this.parentAgent.visitedRides.push(this.targetNode);
 
-          // 🔥 PERBAIKAN: Selalu bangunkan induk jika dia sedang berstatus WAITING_REUNION
+          // Selalu bangunkan induk jika dia sedang berstatus WAITING_REUNION
           if (this.parentAgent.waitingForParts <= 0 && this.parentAgent.agentState === AgentStates.WAITING_REUNION) {
             this.parentAgent.agentState = AgentStates.FINISHED; 
           }
@@ -450,7 +444,7 @@ class Agent {
     this.startQueueTime = secondsInSim;
   }
 
-  // 🔥 VERSI AMAN: Sinkronisasi Mutlak Buku Harian & Variabel Angka
+  // Sinkronisasi Mutlak Buku Harian & Variabel Angka
   startRiding() {
     this.agentState = AgentStates.RIDING; 
     
@@ -484,7 +478,7 @@ class Agent {
             }
             if (!exists) {
                 this.parentAgent.rideHistoryLog.push(logEntry);
-                // 🔥 SINKRONISASI: Paksa angka mengikuti panjang buku harian!
+                // Paksa angka mengikuti panjang buku harian!
                 this.parentAgent.numRidesTaken = this.parentAgent.rideHistoryLog.length;
             }
             
@@ -495,7 +489,7 @@ class Agent {
             }
             if (!exists) {
                 this.rideHistoryLog.push(logEntry);
-                // 🔥 SINKRONISASI: Paksa angka mengikuti panjang buku harian!
+                // Paksa angka mengikuti panjang buku harian!
                 this.numRidesTaken = this.rideHistoryLog.length;
             }
         }
@@ -530,9 +524,9 @@ class Agent {
     this.agentState = AgentStates.FINISHED;
   }
 
-  // =============================================================
-  // 🔥 FUNGSI BARU: X-RAY VISION UNTUK MEMBONGKAR ANTREAN ASLI
-  // =============================================================
+  // ==========================================
+  // X-RAY VISION UNTUK MEMBONGKAR ANTREAN ASLI
+  // ==========================================
   getTrueWaitTime(rideNode) {
       let baseTime = rideNode.getQueueTime();
 

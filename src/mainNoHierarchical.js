@@ -481,9 +481,10 @@ function draw() {
     drawDisplay();
 
     // Rekam Global Rho untuk rata-rata harian (ambil tiap frame kelipatan 60 agar tidak terlalu berat)
-    if (frameCount % 60 === 0 && currentHour < parkCloseHour) {
+    // ✅ FIX: Gunakan frameRunning (bukan frameCount) agar reset benar-benar nol-kan rekaman.
+    // Tambahkan grace period 300 frame (~5 detik sim) agar wahana sempat stabil dulu.
+    if (frameRunning % 60 === 0 && frameRunning > 300 && currentHour < parkCloseHour) {
         
-        // 🔥 PERBAIKAN: Cegah Dilusi Data! 
         // Hanya rekam nilai Rho jika ada orang di taman, ATAU masih ada jadwal kedatangan pengunjung.
         if (agents.length > 0 || arrivalSchedule.length > 0) {
             let macroMetrics = getGlobalQueueMetrics(simMap);

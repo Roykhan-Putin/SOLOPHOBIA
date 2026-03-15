@@ -55,7 +55,7 @@ Simulasi ini menggunakan model **M/M/1** — single server queue dengan:
 | **Lq = ρ²/(1−ρ)** | Rata-rata jumlah pengunjung dalam antrian |
 | **Wq = Lq/λ** | Rata-rata waktu tunggu dalam antrian |
 
-> Asumsi: setiap wahana dimodelkan sebagai server independen dengan distribusi kedatangan Poisson dan waktu pelayanan eksponensial.
+> Asumsi: setiap wahana dimodelkan sebagai server independen dengan distribusi kedatangan Gamma dan waktu pelayanan eksponensial.
 
 ---
 

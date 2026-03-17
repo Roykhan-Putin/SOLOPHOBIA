@@ -17,6 +17,27 @@ Project ini merupakan bagian dari ekosistem DUFAN bersama [Web Platform](https:/
 
 ---
 
+## 🧱 Based Model
+
+Project ini dikembangkan berdasarkan dan terinspirasi dari model simulasi berikut:
+
+**[mickey1356/sim_project](https://github.com/mickey1356/sim_project)** — *Amusement Park Simulation*  
+SUTD 40.015 Simulation Modelling and Analysis Project
+
+Model dasar tersebut menyimulasikan pergerakan pengunjung di taman hiburan menggunakan pendekatan *agent-based simulation* berbasis JavaScript. Fitur-fitur utama yang menjadi fondasi project ini meliputi:
+
+| Fitur Based Model | Implementasi di Project Ini |
+|---|---|
+| Tipe pengunjung berbeda (priority, group, single) | Diadaptasi menjadi pengunjung reguler & Fast Track |
+| Dynamic ride selection & pathfinding | Dikembangkan menjadi Hierarchical & No Hierarchical Routing |
+| Statistik waktu tunggu per wahana | Diperluas dengan model antrian formal **M/M/1** (λ, μ, ρ, Lq, Wq) |
+| Customisable map layouts | Disesuaikan dengan layout nyata wahana **DUFAN Ancol** |
+| Grafik statistik kunci pengunjung | Diperluas ke dashboard interaktif **Streamlit** dengan export CSV |
+
+> Pengembangan signifikan yang dilakukan tim UNAIR di atas model dasar tersebut: penambahan **teori antrian M/M/1** sebagai kerangka analisis formal, implementasi **Hierarchical Zone Routing** dengan algoritma PWT, **balking behavior**, konteks taman hiburan nyata (DUFAN Ancol), serta dashboard visualisasi komparatif berbasis Python/Streamlit.
+
+---
+
 ## ✨ Fitur Utama
 
 ### 🗺️ SIM-01 — Hierarchical Routing
@@ -149,12 +170,7 @@ dufan-simulation/
 | **Simulation** | [dufan-simulation.vercel.app](https://dufan-simulation.vercel.app) | Repo ini — simulasi & analisis antrian |
 | **Web Platform** | [projectdufan.vercel.app](https://projectdufan.vercel.app) | Frontend pengunjung — beli tiket & dashboard |
 | **Ticketing System** | [ticketingproject.vercel.app](https://ticketingproject.vercel.app) | Admin & staff tools — generate & scan tiket |
-
----
-
-## 📊 Data Hasil Simulasi
-
-Data Hasil Simulasi dapat dilihat pada link berikut https://drive.google.com/drive/folders/1ZceUZ7rNGI6Hby3sdXhK9nA-5L6php4p?usp=sharing
+| **Based Model** | [mickey1356/sim_project](https://github.com/mickey1356/sim_project) | Model dasar simulasi taman hiburan (SUTD) |
 
 ---
 
